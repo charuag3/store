@@ -1,0 +1,16 @@
+package com.store.dao;
+
+import java.util.List;
+
+import com.store.entity.User;
+
+public interface UserDAO {
+
+	User getUser(String userName);
+	List<User> getAllUsers();
+	void addUser(User user);
+	void updateUser(User user);
+	void deleteUser(String username);
+	
+
+}
