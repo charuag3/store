@@ -16,7 +16,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import com.store.dao.UserDAOImpl;
 import com.store.entity.User;
 
@@ -24,7 +23,7 @@ import com.store.entity.User;
 @Stateless
 @LocalBean
 public class UserService {
-
+  
 	@EJB
 	private UserDAOImpl userDao;
 
@@ -34,8 +33,12 @@ public class UserService {
 	public Response getUser(@PathParam("userName") String userName) {
 		System.out.println("get  user");
 		User user=userDao.getUser(userName);
-		return Response.status(200).entity(user).build();
-
+		if(user==null) {
+			return Response.status(404).entity("{\"error\": \"No user found for given userName.\"}").build();
+		}else {
+			return Response.status(200).entity(user).build();
+		}
+		
 	}
 
 	@GET
@@ -63,14 +66,29 @@ public class UserService {
 		@Produces({MediaType.APPLICATION_JSON})
 	public Response updateUser(User user)
 	{
-		userDao.updateUser(user);
-		return Response.status(200).entity(user).build();
+		boolean isUpdated = userDao.updateUser(user);
+		if(isUpdated) {
+			return Response.status(200).entity(user).build();
+		}else {
+			return Response.status(404).entity("{\"error\": \"No user found for given ID.\"}").build();
+		}
+		
 	}
 	@DELETE
 	@Path("{userName}")
 	public Response deleteUser(@PathParam("userName") String userName)
 	{
-		userDao.deleteUser(userName);
-		return Response.status(204).build();
+		User user=userDao.getUser(userName);
+		if(user==null) {
+			return Response.status(404).entity("{\"error\": \"No user found for given ID.\"}").build();
+		}else {
+			userDao.deleteUser(userName);
+			return Response.status(204).build();
+		}
+		
+		
+		
 	}
+	
+	
 }

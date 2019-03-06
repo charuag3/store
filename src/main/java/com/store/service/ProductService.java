@@ -17,9 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.store.dao.ProductDAOImpl;
-import com.store.dao.UserDAOImpl;
 import com.store.entity.Product;
-import com.store.entity.User;
 
 @Path("/product")
 @Stateless
@@ -36,10 +34,15 @@ public class ProductService {
 	public Response getProduct(@PathParam("id") int id) {
 		System.out.println("get a product");
 		Product product=productDao.getProduct(id);
-		return Response.status(200).entity(product).build();
-
+		System.out.println(product);
+		if(product==null) {
+			return Response.status(404).entity("{\"error\": \"No user found for given ID.\"}").build();
+		}else {
+			return Response.status(200).entity(product).build();
+		}
 	}
-
+	
+		
 	@GET
 	@Path("/all")
 	@Produces({MediaType.APPLICATION_JSON})
@@ -51,10 +54,11 @@ public class ProductService {
 	
 	@POST
 	@Path("/add")
-	@Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-	//@Produces({MediaType.TEXT_HTML})
+	@Produces({MediaType.APPLICATION_JSON})
+	
 	public Response addProduct(Product product) {
-		System.out.println("adding a product");
+	
+		System.out.println("adding a product : "+product);
 		productDao.addProduct(product);
 		return Response.status(201).entity("product has been successfully added....").build();	
 	}
@@ -65,15 +69,30 @@ public class ProductService {
 		@Produces({MediaType.APPLICATION_JSON})
 	public Response updateProduct(Product product)
 	{
-		productDao.updateProduct(product);
-		return Response.status(200).entity(product).build();
+		boolean isUpdated = productDao.updateProduct(product);;
+		if(isUpdated) {
+			return Response.status(200).entity(product).build();
+		}else {
+			return Response.status(404).entity("{\"error\": \"No product found for given ID.\"}").build();
+		}
+		
+		
 	}
 	@DELETE
 	@Path("{id}")
 	public Response deleteProduct(@PathParam("id") int id)
 	{
-		productDao.deleteProduct(id);
-		return Response.status(204).build();
+		Product product=productDao.getProduct(id);
+		if(product==null) {
+			return Response.status(404).entity("{\"error\": \"No product found for given ID.\"}").build();
+		}else {
+			productDao.deleteProduct(id);
+			return Response.status(204).build();
+		}
+		
+		
+		
+	
 	
 }}
 

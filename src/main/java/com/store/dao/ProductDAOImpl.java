@@ -21,6 +21,7 @@ public class ProductDAOImpl implements ProductDAO{
 		return em.find(Product.class, id);
 		
 	}
+	
 
 	@Override
 	public List<Product> getAllProducts() {
@@ -30,15 +31,25 @@ public class ProductDAOImpl implements ProductDAO{
 
 	@Override
 	public void addProduct(Product product) {
+		System.out.println("product is : "+product);
 		em.persist(product);
-		
+		//em.getTransaction().commit();
+		//em.close();
 	}
 
 	@Override
-	public void updateProduct(Product product) {
-		em.merge(product);
-		
+	public boolean updateProduct(Product product) {
+		Product product1 = em.find(Product.class, product.getId());
+		if(product1!=null) {
+			em.merge(product);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
+		
+	
 
 	@Override
 	public void deleteProduct(int id) {

@@ -2,23 +2,26 @@ package com.store.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @XmlRootElement
 public class Product {
 	@Id
-	int id;
-	String name;
-	String category;
-	String color;
-	Double price;
-	String dimension;
-	Double weight;
-	Double discount;
-	@Column(name="unitsavailabe")
-	int unitsAvailabe;
-	String image;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String name;
+	private String category;
+	private String color;
+	private Double price;
+	private String dimension;
+	private Double weight;
+	private Double discount;
+	@Column(name="unitsavailable")
+	private int unitsAvailable;
+	private String image;
 	public int getId() {
 		return id;
 	}
@@ -67,11 +70,11 @@ public class Product {
 	public void setDiscount(Double discount) {
 		this.discount = discount;
 	}
-	public int getUnitsAvailabe() {
-		return unitsAvailabe;
+	public int getUnitsAvailable() {
+		return unitsAvailable;
 	}
-	public void setUnitsAvailabe(int unitsAvailabe) {
-		this.unitsAvailabe = unitsAvailabe;
+	public void setUnitsAvailable(int unitsAvailable) {
+		this.unitsAvailable = unitsAvailable;
 	}
 	public String getImage() {
 		return image;
@@ -83,7 +86,9 @@ public class Product {
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", category=" + category + ", color=" + color + ", price="
 				+ price + ", dimension=" + dimension + ", weight=" + weight + ", discount=" + discount
-				+ ", unitsAvailabe=" + unitsAvailabe + ", image=" + image + "]";
+				+ ", unitsAvailabe=" + unitsAvailable + ", image=" + image + "]";
 	}
+	
+	
 
 }

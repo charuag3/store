@@ -35,8 +35,15 @@ public void addUser(User user) {
 }
 
 @Override
-public void updateUser(User user) {
-	em.merge(user);
+public boolean updateUser(User user) {
+	User user1 = em.find(User.class, user.getUserName());
+	if(user1!=null) {
+		em.merge(user);
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 @Override
